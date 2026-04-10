@@ -29,6 +29,16 @@ const vector<TestOption> option_list =
         {"recovery_switch", 9},
         {"body_height", 10},
         {"stand_up", 11},
+        
+        // Caution:  test in open area
+        {"enter_leftside_gait", 12},
+        {"exit_leftside_gait", 13},
+        {"enter_handstand", 14},
+        {"exit_handstand", 15},
+        {"front_flip", 16},
+        {"back_flip", 17},
+        {"pose", 18},
+        {"euler", 19}
 
 };
 
@@ -164,6 +174,38 @@ int main(int argc, char **argv)
         else if (test_option.id == 11)
         {
             res = sport_client.StandUp();
+        }
+        else if (test_option.id == 12)
+        {
+            res = sport_client.LeftSideGait(1);
+        }
+        else if (test_option.id == 13)
+        {
+            res = sport_client.LeftSideGait(0);
+        }
+        else if (test_option.id == 14)
+        {
+            res = sport_client.HandStand(1);
+        }
+        else if (test_option.id == 15)
+        {
+            res = sport_client.HandStand(0);
+        }
+        else if (test_option.id == 16)
+        {
+            res = sport_client.FrontFlip();
+        }
+        else if (test_option.id == 17)
+        {
+            res = sport_client.BackFlip();
+        }
+        else if (test_option.id == 18)
+        {
+            res = sport_client.BodyPosition(0.2f, 0.2f, -0.2f, 0.2f);
+        }
+        else if (test_option.id == 19)
+        {
+            res = sport_client.Euler(0.2f, 0.3f, 0.3f);
         }
 
 

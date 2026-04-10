@@ -26,6 +26,42 @@ namespace unitree
       const int ID_BACK_FLIP = 11;
       const int ID_RECOVERY = 12;
       const int ID_BASE_HEIGHT_CTRL = 13;
+      const int ID_POSE = 14;
+      const int ID_EULER = 15;
+
+      class PoseVec4 : public common::Jsonize
+      {
+      public:
+        PoseVec4() : x(0.0F), y(0.0F), z(0.0F), yaw(0.0F)
+        {
+        }
+
+        ~PoseVec4()
+        {
+        }
+
+        void fromJson(common::JsonMap &json)
+        {
+          common::FromJson(json["x"], x);
+          common::FromJson(json["y"], y);
+          common::FromJson(json["z"], z);
+          common::FromJson(json["yaw"], yaw);
+        }
+
+        void toJson(common::JsonMap &json) const
+        {
+          common::ToJson(x, json["x"]);
+          common::ToJson(y, json["y"]);
+          common::ToJson(z, json["z"]);
+          common::ToJson(yaw, json["yaw"]);
+        }
+
+      public:
+        float x;
+        float y;
+        float z;
+        float yaw;
+      };
 
       class SportClient : public Client
       {
@@ -49,6 +85,14 @@ namespace unitree
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BODYHEIGHT);
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_SPEEDLEVEL);
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_SETAUTORECOVERY);
+
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BODYPOSITION);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_LEFTSIDEGAIT);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_RIGHTSIDEGAIT);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_HANDSTAND);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BIPEDSTAND);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_FRONTFLIP);
+          UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_BACKFLIP);
 
           UT_ROBOT_CLIENT_REG_API_NO_PROI(ROBOT_SPORT_API_ID_GETSTATE);
         }
@@ -136,6 +180,66 @@ namespace unitree
           json.data = level;
           parameter = common::ToJsonString(json);
           return Call(ROBOT_SPORT_API_ID_SPEEDLEVEL, parameter, data);
+        }
+
+        int32_t BodyPosition(float x, float y, float z, float yaw)
+        {
+          std::string parameter, data;
+          PoseVec4 json;
+          json.x = x;
+          json.y = y;
+          json.z = z;
+          json.yaw = yaw;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_BODYPOSITION, parameter, data);
+        }
+
+        int32_t LeftSideGait(int enter)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = enter;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_LEFTSIDEGAIT, parameter, data);
+        }
+
+        int32_t RightSideGait(int enter)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = enter;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_RIGHTSIDEGAIT, parameter, data);
+        }
+
+        int32_t HandStand(int enter)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = enter;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_HANDSTAND, parameter, data);
+        }
+
+        int32_t BipedStand(int enter)
+        {
+          std::string parameter, data;
+          go2::JsonizeDataInt json;
+          json.data = enter;
+          parameter = common::ToJsonString(json);
+          return Call(ROBOT_SPORT_API_ID_BIPEDSTAND, parameter, data);
+        }
+
+        int32_t FrontFlip()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_FRONTFLIP, parameter, data);
+        }
+
+        int32_t BackFlip()
+        {
+          std::string parameter, data;
+          return Call(ROBOT_SPORT_API_ID_BACKFLIP, parameter, data);
         }
 
         int32_t SetAutoRecovery(int switch_on)
